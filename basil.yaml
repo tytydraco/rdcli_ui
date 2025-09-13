@@ -1,0 +1,15 @@
+basil:
+  icons:
+    cmds:
+      - 'flutter pub run icons_launcher:create'
+  build_apk:
+    cmds:
+      - 'flutter build apk --release'
+  build_web:
+    cmds:
+      - 'flutter build web --release --web-renderer html --base-href "/build/web/"'
+  publish:
+    cmds:
+      - 'git add -f build/web/'
+      - 'bash -c "git commit -sam \"Build web: $(date)\""'
+      - 'git push'
