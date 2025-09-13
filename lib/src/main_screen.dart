@@ -81,6 +81,7 @@ class _MainScreenState extends State<MainScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: TextFormField(
+                  obscureText: true,
                   enabled: !_isDownloading,
                   controller: _apiKeyController,
                   decoration: const InputDecoration(
