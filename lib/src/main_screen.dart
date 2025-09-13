@@ -41,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
       link = await rdcli.downloadLink();
 
       _debugInfo = 'Done!';
-    } on RdcliException catch (e, stacktrace) {
+    } catch (e, stacktrace) {
       link = 'Error!';
 
       _debugInfo = '$e\n$stacktrace';
