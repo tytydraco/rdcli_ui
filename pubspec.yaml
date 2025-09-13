@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   rdcli:
     git: https://github.com/tytydraco/rdcli
+  shared_objects:
+    git: https://github.com/tytydraco/shared_objects
 
 dev_dependencies:
   flutter_test:
