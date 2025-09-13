@@ -12,6 +12,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   String _debugInfo = '';
   bool _isDownloading = false;
 
@@ -24,6 +26,9 @@ class _MainScreenState extends State<MainScreen> {
   final _downloadLinkSharedObject = SharedString('download_link');
 
   Future<void> _download() async {
+    // Make sure everything is validated first.
+    if (!_formKey.currentState!.validate()) return;
+
     final rdcli = Rdcli(
       apiKey: _apiKeyController.text,
       magnet: _magnetLinkController.text,
@@ -75,70 +80,99 @@ class _MainScreenState extends State<MainScreen> {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 600),
           padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: TextFormField(
-                  obscureText: true,
-                  enabled: !_isDownloading,
-                  controller: _apiKeyController,
-                  decoration: const InputDecoration(
-                    hintText: 'Real-Debrid API Key',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: TextFormField(
-                  enabled: !_isDownloading,
-                  controller: _magnetLinkController,
-                  decoration: const InputDecoration(
-                    hintText: 'Magnet Link',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: FilledButton(
-                  onPressed: !_isDownloading ? _download : null,
-                  child: !_isDownloading
-                      ? const Text('Download')
-                      : const Text('Downloading...'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: TextFormField(
-                  readOnly: true,
-                  controller: _downloadLinkController,
-                  decoration: const InputDecoration(
-                    hintText: 'Download Link',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  child: Card(
-                    child: Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text(
-                        _debugInfo,
-                        style: const TextStyle(fontFamily: 'monospace'),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Must not be empty.';
+                      } else {
+                        return null;
+                      }
+                    },
+                    obscureText: true,
+                    enabled: !_isDownloading,
+                    controller: _apiKeyController,
+                    decoration: const InputDecoration(
+                      hintText: 'Real-Debrid API Key',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Must not be empty.';
+                      } else {
+                        return null;
+                      }
+                    },
+                    enabled: !_isDownloading,
+                    controller: _magnetLinkController,
+                    decoration: const InputDecoration(
+                      hintText: 'Magnet Link',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: FilledButton(
+                    onPressed: !_isDownloading ? _download : null,
+                    child: !_isDownloading
+                        ? const Text('Download')
+                        : const Text('Downloading...'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: TextFormField(
+                    readOnly: true,
+                    controller: _downloadLinkController,
+                    decoration: const InputDecoration(
+                      hintText: 'Download Link',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          _debugInfo,
+                          style: const TextStyle(fontFamily: 'monospace'),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
