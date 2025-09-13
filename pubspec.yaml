@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  rdcli:
+    git: https://github.com/tytydraco/rdcli
 
 dev_dependencies:
   flutter_test:
